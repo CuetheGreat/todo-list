@@ -2,19 +2,20 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import {} from 'dotenv/config';
+import { } from 'dotenv/config';
+import router from './src/routes/todo.js'
 
 mongoose.connection.on('error', (error) => {
   console.error({ error });
 });
 mongoose.connection.on('disconnected', (error) => {
-  console.log({ error: 'database has been disconnected' });
+  console.log('database has been disconnected');
 });
 mongoose.connection.on('connected', () => {
   console.log('Connected to DB!');
 });
 
-const db = async () => {
+const database = async () =>{
   try {
     await mongoose.connect(process.env.MONGO_URI);
   } catch (error) {
@@ -27,10 +28,11 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(cors());
+app.use('/api',router )
+
 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  db();
   console.log(`Running: ${PORT}`);
 });
